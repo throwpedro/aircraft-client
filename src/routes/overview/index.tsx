@@ -1,10 +1,13 @@
 import {
+  Alert,
   Autocomplete,
   Box,
   Button,
+  Snackbar,
   Stack,
   TextField,
   Typography,
+  type AlertProps,
 } from "@mui/material";
 import { createFileRoute } from "@tanstack/react-router";
 import AddIcon from "@mui/icons-material/Add";
@@ -39,12 +42,26 @@ export type SubmitPayload = CreatePayload | UpdatePayload;
 
 function RouteComponent() {
   const [, setOpen] = useDialogOpen();
+  const [snackbarState, setSnackbarState] = useState<{
+    isOpen: boolean;
+    message: string;
+    severity: AlertProps["severity"];
+  }>({
+    isOpen: false,
+    message: "",
+    severity: "success",
+  });
   const queryClient = useQueryClient();
   const aircrafts = useFetchAircrafts().data;
 
   const createAircraftQuery = useCreateAircraft({
     onSuccess: () => {
       setOpen(false);
+      setSnackbarState({
+        ...snackbarState,
+        message: "Created New Aircraft",
+        isOpen: true,
+      });
       queryClient.invalidateQueries({ queryKey: ["allAircrafts"] });
     },
   });
@@ -52,6 +69,11 @@ function RouteComponent() {
   const updateAircraftMutation = useUpdateAircraft({
     onSuccess: () => {
       setOpen(false);
+      setSnackbarState({
+        ...snackbarState,
+        message: "Updated Aircraft",
+        isOpen: true,
+      });
       queryClient.invalidateQueries({ queryKey: ["allAircrafts"] });
     },
     onError: (error) => {
@@ -102,6 +124,19 @@ function RouteComponent() {
         </Box>
         <AircraftList />
       </Stack>
+      <Snackbar
+        open={snackbarState.isOpen}
+        onClose={() => setSnackbarState({ ...snackbarState, isOpen: false })}
+        autoHideDuration={4000}
+      >
+        <Alert
+          onClose={() => setSnackbarState({ ...snackbarState, isOpen: false })}
+          variant="filled"
+          severity={snackbarState.severity}
+        >
+          {snackbarState.message}
+        </Alert>
+      </Snackbar>
     </AircraftIdProvider>
   );
 }

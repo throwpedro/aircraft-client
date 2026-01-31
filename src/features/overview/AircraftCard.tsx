@@ -3,7 +3,9 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Chip,
   IconButton,
+  Stack,
   Typography,
 } from "@mui/material";
 import type { Aircraft } from "../../api/aircrafts";
@@ -45,8 +47,9 @@ export const AircraftCard = ({ aircraft }: { aircraft: Aircraft }) => {
   };
 
   return (
-    <Card sx={{ padding: 2, height: 350 }}>
+    <Card sx={{ padding: 1, height: 250 }}>
       <CardHeader
+        sx={{ pb: 0 }}
         action={[
           <IconButton
             onClick={handleEditClick}
@@ -68,41 +71,69 @@ export const AircraftCard = ({ aircraft }: { aircraft: Aircraft }) => {
           />,
         ]}
         title={aircraft.tailNumber}
-        subheader={aircraft.aircraftType}
-      />
-      <CardContent>
-        <Typography>Seats: {aircraft.numberOfSeats}</Typography>
-        <Typography>
-          Next Maintenance:{" "}
-          {new Date(aircraft.nextMaintenanceDate).toLocaleTimeString()}
-        </Typography>
-        <Typography>
-          Suited for Pets:{" "}
-          <Box
-            component="span"
-            color={aircraft.isSuitedForPets ? "success.main" : "error.main"}
-          >
-            {aircraft.isSuitedForPets ? "Yes" : "No"}
-          </Box>
-        </Typography>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography component="span" sx={{ mr: 1 }}>
-            Interior Condition:
+        subheader={
+          <Typography sx={{ opacity: 0.8, fontSize: 14 }}>
+            {aircraft.aircraftType}{" "}
+            {aircraft.serialNumber ? `| ${aircraft.serialNumber}` : ""} |{" "}
+            {aircraft.id}
           </Typography>
-          <CircularProgressWithLabel
-            enableTrackSlot
-            color={aircraft.interiorCondition < 0.5 ? "error" : "success"}
-            value={aircraft.interiorCondition * 100}
-            label={aircraft.interiorCondition.toString()}
-          />
+        }
+      />
+      <CardContent
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          gap: 3,
+        }}
+      >
+        <Box display="flex" flexDirection="row">
+          <Box display="flex" flexDirection="column" flexGrow={1} gap={2}>
+            <Box display="flex" justifyContent="space-between">
+              <Typography>Seats:</Typography>
+              <Typography>{aircraft.numberOfSeats}</Typography>
+            </Box>
+            <Box display="flex" justifyContent="space-between">
+              <Typography>Next Maintenance:</Typography>
+              <Typography>
+                {new Date(aircraft.nextMaintenanceDate).toLocaleDateString()}
+              </Typography>
+            </Box>
+            <Box display="flex" justifyContent="space-between">
+              <Typography>Suited for Pets:</Typography>
+              <Chip
+                size="small"
+                label={aircraft.isSuitedForPets ? "Yes" : "No"}
+                color={aircraft.isSuitedForPets ? "success" : "default"}
+                sx={{ color: "white", px: 2 }}
+              />
+            </Box>
+          </Box>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            flexGrow={1}
+            gap={2}
+          >
+            <Typography component="span" sx={{ mr: 1 }}>
+              Interior Condition:
+            </Typography>
+            <Box>
+              <CircularProgressWithLabel
+                enableTrackSlot
+                color={aircraft.interiorCondition < 0.5 ? "error" : "success"}
+                value={aircraft.interiorCondition * 100}
+                label={aircraft.interiorCondition.toFixed(2)}
+              />
+            </Box>
+          </Box>
         </Box>
         {aircraft.comments && (
-          <Typography>Comments: {aircraft.comments}</Typography>
+          <Typography variant="caption" fontStyle={"italic"} fontSize={14}>
+            {aircraft.comments}
+          </Typography>
         )}
-        {aircraft.serialNumber && (
-          <Typography>Serial Number: {aircraft.serialNumber}</Typography>
-        )}
-        <Typography>Aircraft ID: {aircraft.id}</Typography>
       </CardContent>
     </Card>
   );
