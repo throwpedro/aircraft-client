@@ -15,10 +15,10 @@ import { useAircraftId } from "../../contexts/AircraftIdContext";
 import { useDialogOpen } from "../../contexts/DialogContext";
 import { useDeleteAircraft } from "../../hooks/aircrafts";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { ConfirmDialog } from "../../components/ConfirmDialog";
 
-export const AircraftCard = ({ aircraft }: { aircraft: Aircraft }) => {
+export const AircraftCard = memo(({ aircraft }: { aircraft: Aircraft }) => {
   const queryClient = useQueryClient();
   const [, setAircraftId] = useAircraftId();
   const [, setOpen] = useDialogOpen();
@@ -181,4 +181,4 @@ export const AircraftCard = ({ aircraft }: { aircraft: Aircraft }) => {
       </CardContent>
     </Card>
   );
-};
+});

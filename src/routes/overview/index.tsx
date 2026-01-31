@@ -1,28 +1,26 @@
 import {
   Alert,
-  Autocomplete,
   Box,
   Button,
   Snackbar,
   Stack,
-  TextField,
   Typography,
   type AlertProps,
 } from "@mui/material";
 import { createFileRoute } from "@tanstack/react-router";
 import AddIcon from "@mui/icons-material/Add";
 import { AircraftList } from "../../features/overview/AircraftList";
-import {
-  useCreateAircraft,
-  useFetchAircrafts,
-  useUpdateAircraft,
-} from "../../hooks/aircrafts";
+import { useCreateAircraft, useUpdateAircraft } from "../../hooks/aircrafts";
 import { CreateAircraftDialog } from "../../features/overview/CreateAircraftDialog";
 import { useQueryClient } from "@tanstack/react-query";
 import { type Aircraft } from "../../api/aircrafts";
 import { AircraftIdProvider } from "../../contexts/AircraftIdContext";
 import { useDialogOpen } from "../../contexts/DialogContext";
 import { useState } from "react";
+import {
+  AircraftFilterPanel,
+  type AircraftFilter,
+} from "../../features/overview/AircraftFilterPanel";
 
 export const Route = createFileRoute("/overview/")({
   component: RouteComponent,
@@ -52,7 +50,8 @@ function RouteComponent() {
     severity: "success",
   });
   const queryClient = useQueryClient();
-  const aircrafts = useFetchAircrafts().data;
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filters, setFilters] = useState<AircraftFilter>({});
 
   const createAircraftQuery = useCreateAircraft({
     onSuccess: () => {
@@ -111,18 +110,14 @@ function RouteComponent() {
             }
           />
         </Box>
-        <Box>
-          <Autocomplete
-            id="free-solo-demo"
-            freeSolo
-            options={aircrafts?.map((aircraft) => aircraft.tailNumber) || []}
-            renderInput={(params) => (
-              <TextField {...params} label="search..." />
-            )}
-            sx={{ mb: 2 }}
+        <Box mb={2} display="flex" flexDirection="row">
+          <AircraftFilterPanel
+            onChange={setFilters}
+            searchQuery={searchQuery}
+            updateSearchQuery={setSearchQuery}
           />
         </Box>
-        <AircraftList />
+        <AircraftList searchQuery={searchQuery} filters={filters} />
       </Stack>
       <Snackbar
         open={snackbarState.isOpen}
