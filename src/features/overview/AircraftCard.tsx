@@ -5,7 +5,7 @@ import {
   CardHeader,
   Chip,
   IconButton,
-  Stack,
+  Popover,
   Typography,
 } from "@mui/material";
 import type { Aircraft } from "../../api/aircrafts";
@@ -23,6 +23,10 @@ export const AircraftCard = ({ aircraft }: { aircraft: Aircraft }) => {
   const [, setAircraftId] = useAircraftId();
   const [, setOpen] = useDialogOpen();
   const [deleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [commentAnchorEl, setCommentAnchorEl] = useState<HTMLElement | null>(
+    null,
+  );
+  const anchorOpen = Boolean(commentAnchorEl);
 
   const deleteMutation = useDeleteAircraft({
     onSuccess: (deletedId) => {
@@ -31,6 +35,14 @@ export const AircraftCard = ({ aircraft }: { aircraft: Aircraft }) => {
       });
     },
   });
+
+  const handleAnchorClick = (event: React.MouseEvent<HTMLElement>) => {
+    setCommentAnchorEl(event.currentTarget);
+  };
+
+  const handleAnchorClose = () => {
+    setCommentAnchorEl(null);
+  };
 
   const handleEditClick = () => {
     setAircraftId(aircraft.id);
@@ -82,7 +94,7 @@ export const AircraftCard = ({ aircraft }: { aircraft: Aircraft }) => {
       <CardContent
         sx={{
           display: "flex",
-          flexDirection: "row",
+          flexDirection: "column",
           justifyContent: "space-between",
           gap: 3,
         }}
@@ -130,9 +142,41 @@ export const AircraftCard = ({ aircraft }: { aircraft: Aircraft }) => {
           </Box>
         </Box>
         {aircraft.comments && (
-          <Typography variant="caption" fontStyle={"italic"} fontSize={14}>
-            {aircraft.comments}
-          </Typography>
+          <>
+            <Typography
+              variant="caption"
+              fontStyle="italic"
+              fontSize={14}
+              sx={{
+                cursor: aircraft.comments.length > 100 ? "pointer" : "auto",
+              }}
+              onClick={(event) => handleAnchorClick(event)}
+            >
+              {aircraft.comments.slice(0, 100)}{" "}
+              {aircraft.comments.length > 100 ? "..." : ""}
+            </Typography>
+            {aircraft.comments.length > 100 && (
+              <>
+                <Popover
+                  open={anchorOpen}
+                  anchorEl={commentAnchorEl}
+                  onClose={handleAnchorClose}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                >
+                  <Typography sx={{ p: 2, maxWidth: 400 }}>
+                    {aircraft.comments}
+                  </Typography>
+                </Popover>
+              </>
+            )}
+          </>
         )}
       </CardContent>
     </Card>
