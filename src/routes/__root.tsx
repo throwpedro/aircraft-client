@@ -31,6 +31,7 @@ function RootComponent() {
           <Box sx={{ display: "flex", gap: 1, ml: "auto" }}>
             <NavLink to="/overview">Aircrafts</NavLink>
             <NavLink to="/dashboard">Dashboard</NavLink>
+            <NavLink to="/favorites">Favorites</NavLink>
           </Box>
         </Toolbar>
       </AppBar>

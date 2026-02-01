@@ -6,6 +6,8 @@ import { routeTree } from "./routeTree.gen.ts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { getTheme } from "./theme.ts";
 import { DialogProvider } from "./contexts/DialogContext.tsx";
+import { FavoritesProvider } from "./contexts/FavoritesContext.tsx";
+import { AircraftIdProvider } from "./contexts/AircraftIdContext.tsx";
 
 const router = createRouter({
   routeTree,
@@ -17,11 +19,7 @@ const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <DialogProvider>
-        <AppProviders />
-      </DialogProvider>
-    </QueryClientProvider>
+    <AppProviders />
   </StrictMode>,
 );
 
@@ -29,9 +27,17 @@ function AppProviders() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
   return (
-    <ThemeProvider theme={getTheme(prefersDarkMode ? "dark" : "light")}>
-      <CssBaseline />
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <FavoritesProvider>
+        <AircraftIdProvider>
+          <DialogProvider>
+            <ThemeProvider theme={getTheme(prefersDarkMode ? "dark" : "light")}>
+              <CssBaseline />
+              <RouterProvider router={router} />
+            </ThemeProvider>
+          </DialogProvider>
+        </AircraftIdProvider>
+      </FavoritesProvider>
+    </QueryClientProvider>
   );
 }

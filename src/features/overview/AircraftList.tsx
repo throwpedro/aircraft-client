@@ -3,6 +3,7 @@ import { AircraftCard } from "./AircraftCard";
 import { useFetchAircrafts } from "../../hooks/aircrafts";
 import { useMemo } from "react";
 import type { AircraftFilter } from "./AircraftFilterPanel";
+import { useFavorites } from "../../contexts/FavoritesContext";
 
 export const AircraftList = ({
   searchQuery,
@@ -12,6 +13,7 @@ export const AircraftList = ({
   filters: AircraftFilter;
 }) => {
   const { data, isLoading, error } = useFetchAircrafts();
+  const [favorites, setFavorites] = useFavorites();
 
   const filteredData = useMemo(() => {
     if (!data) return [];
@@ -41,17 +43,15 @@ export const AircraftList = ({
     });
   }, [data, filters, searchQuery]);
 
-  // const searchData = useMemo(() => {
-  //   if (!data) {
-  //     return [];
-  //   }
-  //   return data.filter((d) => {
-  //     return (
-  //       d.tailNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //       d.aircraftType.toLowerCase().includes(searchQuery.toLowerCase())
-  //     );
-  //   });
-  // }, [data, searchQuery]);
+  const handleToggleFavorite = (id: string) => {
+    if (favorites.includes(id)) {
+      setFavorites(() => favorites.filter((fav) => fav !== id));
+    } else {
+      setFavorites((favorites) => {
+        return [...favorites, id];
+      });
+    }
+  };
 
   if (isLoading) return <CircularProgress />;
 
@@ -61,7 +61,11 @@ export const AircraftList = ({
     <Grid container spacing={2}>
       {filteredData.map((aircraft) => (
         <Grid size={{ xs: 12, md: 6 }} key={aircraft.id}>
-          <AircraftCard aircraft={aircraft} />
+          <AircraftCard
+            aircraft={aircraft}
+            isFavorite={favorites.includes(aircraft.id)}
+            toggleFavorite={handleToggleFavorite}
+          />
         </Grid>
       ))}
     </Grid>

@@ -89,7 +89,7 @@ function RouteComponent() {
   };
 
   return (
-    <AircraftIdProvider>
+    <>
       <Stack sx={{ display: "flex", p: 4 }}>
         <Box sx={{ display: "flex", mb: 2 }}>
           <Typography variant="h4" sx={{ flexGrow: 1 }}>
@@ -132,6 +132,6 @@ function RouteComponent() {
           {snackbarState.message}
         </Alert>
       </Snackbar>
-    </AircraftIdProvider>
+    </>
   );
 }
