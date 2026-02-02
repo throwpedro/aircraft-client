@@ -1,5 +1,6 @@
 # Foreflight code challenge
 Small React SPA for the Foreflight code challenge.  
+Time spent: 12H + change
 
 ## Setup
 Clone the repo and install deps
