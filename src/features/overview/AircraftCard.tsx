@@ -68,7 +68,7 @@ export const AircraftCard = memo(
     };
 
     return (
-      <Card sx={{ padding: 1, height: 250 }}>
+      <Card sx={{ padding: 1, height: 270 }}>
         <CardHeader
           sx={{ pb: 0 }}
           action={[
