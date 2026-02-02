@@ -42,9 +42,9 @@ A Dashboard. - `Dashboard`
  - A very simple stat overview of some numbers.
 
 A favorites list. - `Favorites`
- - list of favorite aircrafts. 
+ - List of favorite aircrafts. 
 
 Global
- - navigation bar and darkmode toggle  
+ - Navigation bar and darkmode toggle  
 ----
 OBS: Some features might not be 100% completed and/or performance optimized.
