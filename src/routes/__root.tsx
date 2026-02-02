@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-router";
 import { AppBar, Box, Switch, Toolbar, Typography } from "@mui/material";
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
+import { useDarkMode } from "../contexts/DarkModeContext";
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -14,6 +15,7 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   const navigate = useNavigate();
+  const [, setDarkMode] = useDarkMode();
 
   React.useEffect(() => {
     if (window.location.pathname === "/") {
@@ -27,7 +29,7 @@ function RootComponent() {
         <Toolbar>
           <AirplanemodeActiveIcon sx={{ mr: 1 }} />
           <Typography variant="h6">Aircrafts</Typography>
-          <Switch onChange={() => {}} />
+          <Switch color="warning" onChange={() => setDarkMode((dm) => !dm)} />
           <Box sx={{ display: "flex", gap: 1, ml: "auto" }}>
             <NavLink to="/overview">Aircrafts</NavLink>
             <NavLink to="/dashboard">Dashboard</NavLink>

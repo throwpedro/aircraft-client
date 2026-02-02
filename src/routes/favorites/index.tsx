@@ -13,6 +13,10 @@ function RouteComponent() {
 
   const { data } = useFetchAircrafts();
 
+  const handleFavoriteToggle = (id: string) => {
+    setFavorites((favs) => favs.filter((favId) => favId !== id));
+  }
+
   return (
     <Stack p={4}>
       <Box sx={{ display: "flex", mb: 2 }}>
@@ -27,7 +31,7 @@ function RouteComponent() {
               <AircraftCard
                 key={d.id}
                 aircraft={d}
-                toggleFavorite={() => {}}
+                toggleFavorite={handleFavoriteToggle}
                 isFavorite={favorites.includes(d.id)}
               />
             );

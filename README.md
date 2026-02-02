@@ -1,73 +1,50 @@
-# React + TypeScript + Vite
+# Foreflight code challenge
+Small React SPA for the Foreflight code challenge.  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Setup
+Clone the repo and install deps
+`bun install`
+Should work just fine with npm as well(node v. 22)
+`npm install`  
 
-Currently, two official plugins are available:
+Have the node api running and spin up the app:
+`bun run dev` or `npm run dev`  
+The app is not particularly optimized(then there's something to talk about :=)), so you can also run the prod build to mitigate some sluggishness:  
+`bun run build` -> `bun run preview`  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tests
+A very simple end-to-end test for playwright lives in `/tests/` that verifies routes are working  
+`npx playwright install`  
+`npx playwright test`  
+Optionally, to see what was tested:
+`npx playwright show-report`
 
-## React Compiler
+## Navigating the code and project
+The project leverages a couple of different dependencies, namely:  
+[Tan stack router](https://tanstack.com/router/latest) for the(somewhat limited) file based routing in the app.  
+[Tan stack query](https://tanstack.com/query/latest) for handling http requests.
+[Material UI](https://mui.com/material-ui/) as a UI library.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+#### Project structure  
+Top level entries lives in `routes/`  
+General re-usable components live in `components/`  
+Feature based components live in `features/{feature}/`  
+Api routes live in `api/`  
+And contexts and hooks are in `context/` and `hooks/` respectively.
 
-## Expanding the ESLint configuration
+#### Features
+The app contains  
+An overview of aircraft. - `Aircrafts`
+ - List of aircraft cards with the ability to search and filter.
+ - Crud operations and (a somewhat scuffed) 'favorite' feature.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+A Dashboard. - `Dashboard`
+ - A very simple stat overview of some numbers.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+A favorites list. - `Favorites`
+ - list of favorite aircrafts. 
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Global
+ - navigation bar and darkmode toggle  
+----
+OBS: Some features might not be 100% completed and/or performance optimized.

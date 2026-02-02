@@ -14,7 +14,6 @@ import { useCreateAircraft, useUpdateAircraft } from "../../hooks/aircrafts";
 import { CreateAircraftDialog } from "../../features/overview/CreateAircraftDialog";
 import { useQueryClient } from "@tanstack/react-query";
 import { type Aircraft } from "../../api/aircrafts";
-import { AircraftIdProvider } from "../../contexts/AircraftIdContext";
 import { useDialogOpen } from "../../contexts/DialogContext";
 import { useState } from "react";
 import {
