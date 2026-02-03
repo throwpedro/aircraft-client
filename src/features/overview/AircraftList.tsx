@@ -45,7 +45,7 @@ export const AircraftList = ({
 
   const handleToggleFavorite = (id: string) => {
     if (favorites.includes(id)) {
-      setFavorites(() => favorites.filter((fav) => fav !== id));
+      setFavorites((favs) => favs.filter((fav) => fav !== id));
     } else {
       setFavorites((favorites) => {
         return [...favorites, id];
